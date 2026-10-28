@@ -26,7 +26,8 @@ def ideator_node(state: PipelineState)-> dict:
     start_time= time.time()
 
     #initialize gemini with structured output
-    llm= ChatGoogleGenerativeAI(model= FAST_MODEL, temperature= 0.7)
+    #llm= ChatGoogleGenerativeAI(model= FAST_MODEL, temperature= 0.7)
+    llm= ChatGoogleGenerativeAI(model=FAST_MODEL)
     structured_llm= llm.with_structured_output(AngleOptions, include_raw=True)
 
     messages=[SystemMessage(content=IDEATOR_SYSTEM_PROPT), HumanMessage(content=f"Generate 3 distinct angles for this topic:\n\n{topic}")]

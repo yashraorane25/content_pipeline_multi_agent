@@ -1,5 +1,8 @@
 import time
-from duckduckgo_search import DDGS
+try:
+    from ddgs import DDGS
+except ImportError:
+    from duckduckgo_search import DDGS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import SystemMessage, HumanMessage
 from src.state import PipelineState
@@ -16,10 +19,10 @@ RESEARCHER_SYSTEM_PROMPT = """You are an elite research analyst for executive
     - List the sources used.                                                      
     """
 
-def search_web(query: str, max_results: int=4)-> list[dict]:
+def search_web(query: str, max_results: int=2)-> list[dict]:
     """saftley queries DuckDuckGo will fallback if rate limited"""
     try:
-        ddgs= DDGS()
+        ddgs = DDGS(timeout=3)
         results= list(ddgs.text(query, max_results=max_results))
         return results
     except Exception as e:
@@ -41,7 +44,8 @@ def researcher_node(state: PipelineState)-> dict:
     get('href')}" for r in raw_results] )
 
     #2. Synthesize using Gemini
-    llm= ChatGoogleGenerativeAI(model= FAST_MODEL, temperature= 0.3)
+    #llm= ChatGoogleGenerativeAI(model= FAST_MODEL, temperature= 0.3)
+    llm= ChatGoogleGenerativeAI(model= FAST_MODEL)
     messages = [                                                              
             SystemMessage(content=RESEARCHER_SYSTEM_PROMPT),                      
             HumanMessage(                                                         

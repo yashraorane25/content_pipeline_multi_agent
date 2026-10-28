@@ -32,7 +32,8 @@ def fact_checker_node(state: PipelineState)-> dict:
     research_summary= state.get("research_summary","")
 
     start_time= time.time()
-    llm= ChatGoogleGenerativeAI(model=FAST_MODEL, temperature= 0.1)
+    #llm= ChatGoogleGenerativeAI(model=FAST_MODEL, temperature= 0.1)
+    llm= ChatGoogleGenerativeAI(model=FAST_MODEL)
     structured_llm= llm.with_structured_output(FactCheckReport, include_raw=True)
 
     messages=[SystemMessage(content=FACT_CHECKER_SYSTEM_PROMPT),
